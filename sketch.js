@@ -5,11 +5,11 @@
 
 function setup() {
 
-	maxradius = 25;
+	maxradius = 15;
 	var w = window.innerWidth;
 	var h = window.innerHeight;
 	width = w-maxradius;
-	height = h-maxradius;
+	height = h-100-maxradius;
 
 	createCanvas(width, height);
 	noStroke();
