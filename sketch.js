@@ -9,7 +9,7 @@ function setup() {
 	var w = window.innerWidth;
 	var h = window.innerHeight;
 	width = w-maxradius;
-	height = h-100-maxradius;
+	height = h-maxradius;
 
 	createCanvas(width, height);
 	noStroke();
@@ -34,12 +34,26 @@ function setup() {
 		}
 	}
 	pointsqueue = [];
+	x = 15;
+	y = 15;
+	mark = millis();
+	moverange = 1.7;
+
+	method = "mouse"; //can be "mouse" or "random walk"
+
 }
 
 function draw() {
 
-	x = Math.round(mouseX/(2*maxradius));
-	y = Math.round(mouseY/(2*maxradius));
+	if("mouse"==method) {
+		x = Math.round(mouseX/(2*maxradius));
+		y = Math.round(mouseY/(2*maxradius));
+	} else if ("random walk" == method) {
+		if(millis() - mark > 150) {
+			mark = millis();
+			randomWalk();
+		}
+	}
 
 	if(size[x][y] == 0) {
 		size[x][y] = 3;
@@ -78,5 +92,16 @@ function draw() {
 		circle((2*i+1)*maxradius, (2*j+1)*maxradius, size[i][j]);
 
 	}
+
+}
+
+function randomWalk() {
+	do {
+		var add1 = round(Math.random()*2*moverange - moverange);
+		var add2 = round(Math.random()*2*moverange - moverange);
+		console.log(add1);
+	} while(!(x+add1>0 && x+add1<numBallsHoriz-2 && y+add2>0 && y+add2<numBallsVert-2));
+	x+=add1;
+	y+=add2;
 
 }
