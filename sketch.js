@@ -5,10 +5,10 @@ function setup() {
 	method = "clickboom"; //can be "mouse", "random walk", or "clickboom"
 	moverange = 1.5; //for randomwalk, establishing how far it can jump per move
 	momentum = 2; //how many steps to take before changing direction in random walk
-	boomrad = 12; //the radius of the boom in clickboom
+	boomrad = 9; //the radius of the boom in clickboom
 	timeBetweenStep = 35; //how much time in milliseconds to wait until taking the next step in animation
 	rate = 0.95; //general rate of circle size change
-	decayspeed = 0.5; //speed of decay of circle size
+	decayspeed = 3; //speed of decay of circle size
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 	var w = window.innerWidth;
@@ -153,7 +153,7 @@ function click() {
 	}
 }
 
-function boom() {
+function boxboom() {
 	var boompoints = [];
 	var len = clicklist.length;
 	for(var k = 0; k < len; k++) {
