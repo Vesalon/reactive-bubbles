@@ -37,9 +37,14 @@ function setup() {
 	x = 15;
 	y = 15;
 	mark = millis();
-	moverange = 1.7;
+	moverange = 1.5;
+	timeBetweenStep = 50;
+	momentum = 2; //how many steps to take before changing direction in random walk
+	momentumCounter = 0;
+	xadd = 0;
+	yadd = 0;
 
-	method = "mouse"; //can be "mouse" or "random walk"
+	method = "random walk"; //can be "mouse" or "random walk"
 
 }
 
@@ -49,7 +54,7 @@ function draw() {
 		x = Math.round(mouseX/(2*maxradius));
 		y = Math.round(mouseY/(2*maxradius));
 	} else if ("random walk" == method) {
-		if(millis() - mark > 150) {
+		if(millis() - mark > timeBetweenStep) {
 			mark = millis();
 			randomWalk();
 		}
@@ -88,7 +93,10 @@ function draw() {
 
 		fill(0);
 		circle((2*i+1)*maxradius, (2*j+1)*maxradius, size[i][j] + 2);
-		fill(255);
+
+		var color = ballColor(i, j);
+		fill(...color);
+
 		circle((2*i+1)*maxradius, (2*j+1)*maxradius, size[i][j]);
 
 	}
@@ -96,12 +104,19 @@ function draw() {
 }
 
 function randomWalk() {
-	do {
-		var add1 = round(Math.random()*2*moverange - moverange);
-		var add2 = round(Math.random()*2*moverange - moverange);
-		console.log(add1);
-	} while(!(x+add1>0 && x+add1<numBallsHoriz-2 && y+add2>0 && y+add2<numBallsVert-2));
-	x+=add1;
-	y+=add2;
+	if(!momentumCounter) {
+		do {
+			xadd = round(moverange*(Math.random()*2 - 1));
+			yadd = round(moverange*(Math.random()*2 - 1));
+		} while(!(x+(xadd*momentum)>0 && x+(xadd*momentum)<numBallsHoriz-2 && y+(yadd*momentum)>1 && y+(yadd*momentum)<numBallsVert-2));
+	}
+	momentumCounter = (momentumCounter+1)%momentum;
+	x+=xadd;
+	y+=yadd;
 
+}
+
+function ballColor(i, j) {
+	var dist = ((i/numBallsHoriz) + (j/numBallsVert)) / 2; //manhattan distance (from 0 for top left corner to 1 for bottom right)
+	return [255*(1 - dist), 255*(dist), 0];
 }
